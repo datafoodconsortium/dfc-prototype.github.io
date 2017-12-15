@@ -1,33 +1,7 @@
 import ClientOAuth2 from 'client-oauth2'
 import React from 'react'
 import { render } from 'react-dom'
-
-class TokenRepository {
-    getTokens() {
-        if (!localStorage.getItem('tokens')) {
-            return [];
-        }
-
-        return JSON.parse(localStorage.getItem('tokens'));
-    }
-
-    addToken(token) {
-        let tokens = this.getTokens();
-
-        tokens.push({
-            accessToken: token.accessToken,
-            expires: token.expires,
-        });
-
-        localStorage.setItem('tokens', JSON.stringify(tokens));
-    }
-
-    clear() {
-        localStorage.removeItem('tokens');
-    }
-}
-
-const tokenRepository = new TokenRepository();
+import { tokenRepository } from './tokenRepository.js';
 
 class TokenStore extends React.Component {
     constructor(props) {
