@@ -8,5 +8,8 @@
   },
   "keywords": [],
   "author": "Nicolas Clavaud <nclavaud@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "parcel-bundler": "^1.2.0"
+  }
 }
