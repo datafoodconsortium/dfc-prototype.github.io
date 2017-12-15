@@ -7,8 +7,14 @@ class TokenStore extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tokens: tokenRepository.getTokens(),
+            tokens: [],
         };
+    }
+
+    componentDidMount() {
+        this.setState({
+            tokens: tokenRepository.getTokens(),
+        });
     }
 
     clearConnections() {
