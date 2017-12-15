@@ -2,6 +2,54 @@ import ClientOAuth2 from 'client-oauth2'
 import React from 'react'
 import { render } from 'react-dom'
 
+
+const fetchTokensFromLocalStorage = () => {
+    if (!localStorage.getItem('tokens')) {
+        return [];
+    }
+
+    return JSON.parse(localStorage.getItem('tokens'));
+};
+
+const appendToken = (user) => {
+    let tokens = fetchTokensFromLocalStorage();
+    tokens.push({ accessToken: user.accessToken, expires: user.expires });
+    localStorage.setItem('tokens', JSON.stringify(tokens));
+}
+
+class TokenStore extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tokens: fetchTokensFromLocalStorage(),
+        };
+    }
+
+    clearConnections() {
+        localStorage.removeItem('tokens');
+        this.setState({
+            tokens: [],
+        });
+    }
+
+    render() {
+        const tokenListItems = this.state.tokens.map(
+            (token, index) => <li key={index}>{token.accessToken} (expires {token.expires})</li>
+        );
+
+        return (
+            <div>
+                <h2>Connections</h2>
+                <ul>{tokenListItems}</ul>
+                {tokenListItems.length > 0 && (
+                    <p><button onClick={this.clearConnections.bind(this)}>Clear connections</button></p>
+                )}
+                <a href={platformAuth.token.getUri()}>Connect to Platform</a>
+            </div>
+        );
+    }
+}
+
 const platformAuth = new ClientOAuth2({
     clientId: '4_4h5htw43hrsw4scsks40g8sowco0kw08gwoo44g0osososgo4o',
     authorizationUri: 'http://localhost:8000/oauth/v2/auth',
@@ -14,6 +62,8 @@ const oauth2Callback = function (uri) {
     platformAuth.token.getToken(uri)
         .then(function (user) {
             console.log(user);
+            appendToken(user);
+            location.href = '/';
         })
         .catch(function (err) {
             console.log(err);
@@ -27,8 +77,8 @@ if (location.pathname === '/redirect') {
 
 render(
     <div>
-        <h1>Mes catalogues</h1>
-        <a href={platformAuth.token.getUri()}>Connect to Platform</a>
+        <h1><a href="/">Mes catalogues</a></h1>
+        <TokenStore />
     </div>,
     document.getElementById('root')
 );
