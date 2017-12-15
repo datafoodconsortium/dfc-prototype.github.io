@@ -2,31 +2,43 @@ import ClientOAuth2 from 'client-oauth2'
 import React from 'react'
 import { render } from 'react-dom'
 
+class TokenRepository {
+    getTokens() {
+        if (!localStorage.getItem('tokens')) {
+            return [];
+        }
 
-const fetchTokensFromLocalStorage = () => {
-    if (!localStorage.getItem('tokens')) {
-        return [];
+        return JSON.parse(localStorage.getItem('tokens'));
     }
 
-    return JSON.parse(localStorage.getItem('tokens'));
-};
+    addToken(token) {
+        let tokens = this.getTokens();
 
-const appendToken = (user) => {
-    let tokens = fetchTokensFromLocalStorage();
-    tokens.push({ accessToken: user.accessToken, expires: user.expires });
-    localStorage.setItem('tokens', JSON.stringify(tokens));
+        tokens.push({
+            accessToken: token.accessToken,
+            expires: token.expires,
+        });
+
+        localStorage.setItem('tokens', JSON.stringify(tokens));
+    }
+
+    clear() {
+        localStorage.removeItem('tokens');
+    }
 }
+
+const tokenRepository = new TokenRepository();
 
 class TokenStore extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tokens: fetchTokensFromLocalStorage(),
+            tokens: tokenRepository.getTokens(),
         };
     }
 
     clearConnections() {
-        localStorage.removeItem('tokens');
+        tokenRepository.clear();
         this.setState({
             tokens: [],
         });
@@ -62,7 +74,7 @@ const oauth2Callback = function (uri) {
     platformAuth.token.getToken(uri)
         .then(function (user) {
             console.log(user);
-            appendToken(user);
+            tokenRepository.addToken(user);
             location.href = '/';
         })
         .catch(function (err) {
