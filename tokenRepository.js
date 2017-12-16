@@ -7,10 +7,11 @@ class TokenRepository {
         return JSON.parse(localStorage.getItem('tokens'));
     }
 
-    addToken(token) {
+    addToken(platform, token) {
         let tokens = this.getTokens();
 
         tokens.push({
+            platform: platform.id,
             accessToken: token.accessToken,
             expires: token.expires,
         });
