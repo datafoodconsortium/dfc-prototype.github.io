@@ -50,7 +50,7 @@ const platformAuth = new ClientOAuth2({
     state: '12345',
 });
 
-const oauth2Callback = function (uri) {
+const platformOauth2Callback = function (uri) {
     platformAuth.token.getToken(uri)
         .then(function (user) {
             console.log(user);
@@ -64,7 +64,7 @@ const oauth2Callback = function (uri) {
 }
 
 if (location.pathname === '/redirect') {
-    oauth2Callback(location.href);
+    platformOauth2Callback(location.href);
 }
 
 render(
