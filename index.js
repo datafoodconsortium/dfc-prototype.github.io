@@ -24,6 +24,10 @@ class TokenStore extends React.Component {
         });
     }
 
+    handleConnect(auth) {
+        location.href = auth.token.getUri();
+    }
+
     render() {
         const tokenListItems = this.state.tokens.map(
             (token, index) => <li key={index}>{token.accessToken} (expires {token.expires})</li>
@@ -36,7 +40,7 @@ class TokenStore extends React.Component {
                 {tokenListItems.length > 0 && (
                     <p><button onClick={this.clearConnections.bind(this)}>Clear connections</button></p>
                 )}
-                <a href={platformAuth.token.getUri()}>Connect to Platform</a>
+                <button onClick={() => this.handleConnect(platformAuth)}>Connect to Platform</button>
             </div>
         );
     }
