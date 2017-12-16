@@ -25,7 +25,11 @@ class TokenStore extends React.Component {
     }
 
     handleConnect(auth) {
-        location.href = auth.token.getUri();
+        let array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        const state = array[0];
+        localStorage.setItem('oauth2.request.state', state);
+        location.href = auth.token.getUri({state: state});
     }
 
     render() {
@@ -50,12 +54,12 @@ const platformAuth = new ClientOAuth2({
     clientId: '4_4h5htw43hrsw4scsks40g8sowco0kw08gwoo44g0osososgo4o',
     authorizationUri: 'http://localhost:8000/oauth/v2/auth',
     redirectUri: 'http://localhost:1234/redirect',
-    scopes: ['read:email', 'read:profile'],
-    state: '12345',
+    scopes: ['read:email', 'read:profile']
 });
 
 const platformOauth2Callback = function (uri) {
-    platformAuth.token.getToken(uri)
+    const state = localStorage.getItem('oauth2.request.state');
+    platformAuth.token.getToken(uri, {state: state})
         .then(function (user) {
             console.log(user);
             tokenRepository.addToken(user);
