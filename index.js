@@ -59,7 +59,7 @@ const platforms = [
         id: 'platform_1',
         name: 'Platform 1',
         client: new ClientOAuth2({
-            clientId: '4_4h5htw43hrsw4scsks40g8sowco0kw08gwoo44g0osososgo4o',
+            clientId: '1_38sng3yrrd4ww0kogsk8kc0sc0wkg44sg88wcggc8sk8ggw88c',
             authorizationUri: 'http://localhost:8000/oauth/v2/auth',
             redirectUri: 'http://localhost:1234/redirect',
             scopes: ['read:email', 'read:profile'],
@@ -69,7 +69,7 @@ const platforms = [
         id: 'platform_2',
         name: 'Platform 2',
         client: new ClientOAuth2({
-            clientId: '4_4h5htw43hrsw4scsks40g8sowco0kw08gwoo44g0osososgo4o',
+            clientId: '1_38sng3yrrd4ww0kogsk8kc0sc0wkg44sg88wcggc8sk8ggw88c',
             authorizationUri: 'http://localhost:8000/oauth/v2/auth',
             redirectUri: 'http://localhost:1234/redirect',
             scopes: ['read:email', 'read:profile'],
