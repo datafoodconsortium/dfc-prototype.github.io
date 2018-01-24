@@ -39,7 +39,7 @@ class TokenStore extends React.Component {
         );
 
         const connectButtons = this.props.platforms.map(
-            (platform) => <span>
+            (platform) => <span key={platform.id}>
                 <Button key={platform.id} onClick={() => this.handleConnect(platform)}>Connect to {platform.name}</Button>
                 {' '}
             </span>
