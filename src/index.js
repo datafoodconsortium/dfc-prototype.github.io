@@ -4,6 +4,75 @@ import { render } from 'react-dom'
 import { Button, Container, Content, Hero, HeroBody, Section, Title } from 'bloomer';
 import { tokenRepository } from './tokenRepository.js';
 
+class Accounts extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tokens: [],
+            usernames: {},
+        };
+
+        this.fetchUsername = this.fetchUsername.bind(this);
+        this.fetchUsernames = this.fetchUsernames.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({
+            tokens: tokenRepository.getTokens(),
+        });
+    }
+
+    fetchUsername(accessToken) {
+        const url = 'http://localhost:8000/api/me';
+        fetch(url, {
+            headers: new Headers({
+                'Authorization': `Bearer ${accessToken}`,
+            }),
+        }).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+
+            throw "Error while fetching data.";
+        })
+        .then(body => {
+            const username = body.username;
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    usernames: {
+                        ...prevState.usernames,
+                        [accessToken]: username
+                    }
+                };
+            });
+        })
+        .catch(e => { console.log(e); });
+    }
+
+    fetchUsernames() {
+        this.state.tokens.map(token => {
+            this.fetchUsername(token.accessToken);
+        });
+    }
+
+    render() {
+        const usernames = Object.keys(this.state.usernames).map(username => (
+            <li key={username}>{this.state.usernames[username]}</li>
+        ));
+
+        return (
+            <Section>
+                <Title>Accounts</Title>
+                <Content>
+                    <ul>{usernames}</ul>
+                    <Button onClick={this.fetchUsernames}>Refresh</Button>
+                </Content>
+            </Section>
+        );
+    }
+}
+
 class TokenStore extends React.Component {
     constructor(props) {
         super(props);
@@ -112,6 +181,7 @@ render(
                 <Title><a href="/">Mes catalogues</a></Title>
             </HeroBody>
         </Hero>
+        <Accounts />
         <TokenStore platforms={platforms} />
     </Container>,
     document.getElementById('root')
