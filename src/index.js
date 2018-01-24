@@ -1,6 +1,7 @@
 import ClientOAuth2 from 'client-oauth2'
 import React from 'react'
 import { render } from 'react-dom'
+import { Button, Container, Content, Hero, HeroBody, Section, Title } from 'bloomer';
 import { tokenRepository } from './tokenRepository.js';
 
 class TokenStore extends React.Component {
@@ -34,22 +35,30 @@ class TokenStore extends React.Component {
 
     render() {
         const tokenListItems = this.state.tokens.map(
-            (token, index) => <li key={index}>{token.platform} {token.accessToken} (expires {token.expires})</li>
+            (token, index) => <li key={index}>{token.platform} {token.accessToken.substring(0, 16)}... (expires {token.expires})</li>
         );
 
         const connectButtons = this.props.platforms.map(
-            (platform) => <button key={platform.id} onClick={() => this.handleConnect(platform)}>Connect to {platform.name}</button>
+            (platform) => <span>
+                <Button key={platform.id} onClick={() => this.handleConnect(platform)}>Connect to {platform.name}</Button>
+                {' '}
+            </span>
         );
 
         return (
-            <div>
-                <h2>Connections</h2>
-                <ul>{tokenListItems}</ul>
-                {tokenListItems.length > 0 && (
-                    <p><button onClick={this.clearConnections.bind(this)}>Clear connections</button></p>
-                )}
+            <Section>
+                <Title>Connections</Title>
+                <Title isSize={4}>Current connections</Title>
+                {tokenListItems.length === 0 && 'No connection'}
+                <Content>
+                    <ul>{tokenListItems}</ul>
+                    {tokenListItems.length > 0 && (
+                        <Button isColor="warning" onClick={this.clearConnections.bind(this)}>Clear connections</Button>
+                    )}
+                </Content>
+                <Title isSize={4}>Add connection</Title>
                 {connectButtons}
-            </div>
+            </Section>
         );
     }
 }
@@ -97,9 +106,13 @@ if (location.pathname === '/redirect') {
 }
 
 render(
-    <div>
-        <h1><a href="/">Mes catalogues</a></h1>
+    <Container>
+        <Hero isColor="primary">
+            <HeroBody>
+                <Title><a href="/">Mes catalogues</a></Title>
+            </HeroBody>
+        </Hero>
         <TokenStore platforms={platforms} />
-    </div>,
+    </Container>,
     document.getElementById('root')
 );
