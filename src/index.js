@@ -1,7 +1,7 @@
 import ClientOAuth2 from 'client-oauth2'
 import React from 'react'
 import { render } from 'react-dom'
-import { Button, Container, Content, Hero, HeroBody, Section, Title } from 'bloomer';
+import { Button, Container, Content, Hero, HeroBody, Image, Media, MediaContent, MediaLeft, Section, Subtitle, Title } from 'bloomer';
 import { tokenRepository } from './tokenRepository.js';
 
 class Accounts extends React.Component {
@@ -178,7 +178,15 @@ render(
     <Container>
         <Hero isColor="primary">
             <HeroBody>
-                <Title><a href="/">Mes catalogues</a></Title>
+                <Media>
+                    <MediaLeft>
+                        <Image isSize="64x64" src="https://avatars1.githubusercontent.com/u/24959977?s=64&v=4" />
+                    </MediaLeft>
+                    <MediaContent>
+                        <Title><a href="/">Mes catalogues</a></Title>
+                        <Subtitle>Data Food Consortium Prototype</Subtitle>
+                    </MediaContent>
+                </Media>
             </HeroBody>
         </Hero>
         <Accounts />
