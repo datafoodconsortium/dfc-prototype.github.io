@@ -22,8 +22,7 @@ class Accounts extends React.Component {
         });
     }
 
-    fetchUsername(accessToken) {
-        const url = 'http://localhost:8000/api/me';
+    fetchUsername(url, accessToken) {
         fetch(url, {
             headers: new Headers({
                 'Authorization': `Bearer ${accessToken}`,
@@ -52,7 +51,9 @@ class Accounts extends React.Component {
 
     fetchUsernames() {
         this.state.tokens.map(token => {
-            this.fetchUsername(token.accessToken);
+            const platform = platforms.filter(p => p.id === token.platform)[0];
+            const url = platform.resources.profile;
+            this.fetchUsername(url, token.accessToken);
         });
     }
 
@@ -134,24 +135,30 @@ class TokenStore extends React.Component {
 
 const platforms = [
     {
-        id: 'platform_1',
-        name: 'Platform 1',
+        id: 'laruchequiditoui',
+        name: 'La Ruche qui dit Oui !',
         client: new ClientOAuth2({
             clientId: '1_38sng3yrrd4ww0kogsk8kc0sc0wkg44sg88wcggc8sk8ggw88c',
-            authorizationUri: 'http://localhost:8000/oauth/v2/auth',
+            authorizationUri: 'http://localhost:8001/oauth/v2/auth',
             redirectUri: 'http://localhost:1234/redirect',
             scopes: ['read:email', 'read:profile'],
         }),
+        resources: {
+            profile: 'http://localhost:8001/api/me',
+        },
     },
     {
-        id: 'platform_2',
-        name: 'Platform 2',
+        id: 'openfoodnetwork',
+        name: 'Open Food Network',
         client: new ClientOAuth2({
             clientId: '1_38sng3yrrd4ww0kogsk8kc0sc0wkg44sg88wcggc8sk8ggw88c',
-            authorizationUri: 'http://localhost:8000/oauth/v2/auth',
+            authorizationUri: 'http://localhost:8002/oauth/v2/auth',
             redirectUri: 'http://localhost:1234/redirect',
             scopes: ['read:email', 'read:profile'],
         }),
+        resources: {
+            profile: 'http://localhost:8002/api/me',
+        },
     },
 ];
 
