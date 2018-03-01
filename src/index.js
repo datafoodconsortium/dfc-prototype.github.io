@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import { Button, Container, Content, Hero, HeroBody, Image, Media, MediaContent, MediaLeft, Section, Subtitle, Title } from 'bloomer';
 import { tokenRepository } from './tokenRepository.js';
 import Accounts from './components/Accounts.jsx';
+import Catalog from './components/Catalog.jsx';
 import TokenStore from './components/TokenStore.jsx';
 import platforms from './platforms';
 import platformOAuth2Callback from './platformOAuth2Callback';
@@ -26,6 +27,7 @@ render(
                 </Media>
             </HeroBody>
         </Hero>
+        <Catalog platforms={platforms} />
         <Accounts platforms={platforms} />
         <TokenStore platforms={platforms} />
     </Container>,
