@@ -12,6 +12,7 @@ const platforms = [
         }),
         resources: {
             profile: 'http://localhost:8001/api/me',
+            catalog: 'http://localhost:8001/api/catalog',
         },
     },
     {
@@ -25,6 +26,7 @@ const platforms = [
         }),
         resources: {
             profile: 'http://localhost:8002/api/me',
+            catalog: 'http://localhost:8002/api/catalog',
         },
     },
 ];

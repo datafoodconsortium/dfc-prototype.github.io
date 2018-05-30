@@ -49,6 +49,10 @@ class Accounts extends React.Component {
     }
 
     fetchUsernames() {
+        this.setState({
+            usernames: {},
+        });
+
         this.state.tokens.map(token => {
             const platform = this.props.platforms.filter(p => p.id === token.platform)[0];
             const url = platform.resources.profile;
@@ -57,8 +61,9 @@ class Accounts extends React.Component {
     }
 
     render() {
-        const usernames = Object.keys(this.state.usernames).map(username => (
-            <li key={username}>{this.state.usernames[username]}</li>
+        const accessTokens = Object.keys(this.state.usernames);
+        const usernames = accessTokens.map(accessToken => (
+            <li key={accessToken}>{this.state.usernames[accessToken]}</li>
         ));
 
         return (
