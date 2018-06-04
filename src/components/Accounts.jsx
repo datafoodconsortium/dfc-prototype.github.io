@@ -15,7 +15,9 @@ class Accounts extends React.Component {
         });
     }
 
-    fetchUsername = (url, accessToken) => {
+    fetchUsername = (platform, accessToken) => {
+        const url = platform.resources.profile;
+
         fetch(url, {
             headers: new Headers({
                 'Authorization': `Bearer ${accessToken}`,
@@ -29,12 +31,13 @@ class Accounts extends React.Component {
         })
         .then(body => {
             const username = body.username;
+            const key = `${username}@${platform.id}`;
             this.setState((prevState) => {
                 return {
                     ...prevState,
                     usernames: {
                         ...prevState.usernames,
-                        [accessToken]: username
+                        [key]: `${username} (${platform.name})`
                     }
                 };
             });
@@ -49,15 +52,14 @@ class Accounts extends React.Component {
 
         this.state.tokens.map(token => {
             const platform = this.props.platforms.filter(p => p.id === token.platform)[0];
-            const url = platform.resources.profile;
-            this.fetchUsername(url, token.accessToken);
+            this.fetchUsername(platform, token.accessToken);
         });
     };
 
     render() {
-        const accessTokens = Object.keys(this.state.usernames);
-        const usernames = accessTokens.map(accessToken => (
-            <li key={accessToken}>{this.state.usernames[accessToken]}</li>
+        const keys = Object.keys(this.state.usernames);
+        const usernames = keys.map(key => (
+            <li key={key}>{this.state.usernames[key]}</li>
         ));
 
         return (
