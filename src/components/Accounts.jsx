@@ -4,16 +4,10 @@ import { Button, Content, Section, Title } from 'bloomer';
 import { tokenRepository } from '../tokenRepository.js';
 
 class Accounts extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tokens: [],
-            usernames: {},
-        };
-
-        this.fetchUsername = this.fetchUsername.bind(this);
-        this.fetchUsernames = this.fetchUsernames.bind(this);
-    }
+    state = {
+        tokens: [],
+        usernames: {},
+    };
 
     componentDidMount() {
         this.setState({
@@ -21,7 +15,7 @@ class Accounts extends React.Component {
         });
     }
 
-    fetchUsername(url, accessToken) {
+    fetchUsername = (url, accessToken) => {
         fetch(url, {
             headers: new Headers({
                 'Authorization': `Bearer ${accessToken}`,
@@ -46,9 +40,9 @@ class Accounts extends React.Component {
             });
         })
         .catch(e => { console.log(e); });
-    }
+    };
 
-    fetchUsernames() {
+    fetchUsernames = () => {
         this.setState({
             usernames: {},
         });
@@ -58,7 +52,7 @@ class Accounts extends React.Component {
             const url = platform.resources.profile;
             this.fetchUsername(url, token.accessToken);
         });
-    }
+    };
 
     render() {
         const accessTokens = Object.keys(this.state.usernames);
