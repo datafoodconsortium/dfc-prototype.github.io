@@ -4,16 +4,10 @@ import { Button, Content, Section, Title } from 'bloomer';
 import { tokenRepository } from '../tokenRepository.js';
 
 class Catalog extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tokens: [],
-            products: {},
-        };
-
-        this.fetchCatalog = this.fetchCatalog.bind(this);
-        this.fetchCatalogs = this.fetchCatalogs.bind(this);
-    }
+    state = {
+        tokens: [],
+        products: {},
+    };
 
     componentDidMount() {
         this.setState({
@@ -21,7 +15,7 @@ class Catalog extends React.Component {
         });
     }
 
-    fetchCatalog(url, accessToken) {
+    fetchCatalog = (url, accessToken) => {
         fetch(url, {
             headers: new Headers({
                 'Authorization': `Bearer ${accessToken}`,
@@ -46,9 +40,9 @@ class Catalog extends React.Component {
             });
         })
         .catch(e => { console.log(e); });
-    }
+    };
 
-    fetchCatalogs() {
+    fetchCatalogs = () => {
         this.setState({
             products: {},
         });
@@ -58,7 +52,7 @@ class Catalog extends React.Component {
             const url = platform.resources.catalog;
             this.fetchCatalog(url, token.accessToken);
         });
-    }
+    };
 
     render() {
         const accessTokens = Object.keys(this.state.products);
