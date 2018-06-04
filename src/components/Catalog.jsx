@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Button, Content, Section, Title } from 'bloomer';
 import { tokenRepository } from '../tokenRepository.js';
+import * as R from 'ramda';
 
 class Catalog extends React.Component {
     state = {
@@ -15,7 +16,9 @@ class Catalog extends React.Component {
         });
     }
 
-    fetchCatalog = (url, accessToken) => {
+    fetchCatalog = (platform, accessToken) => {
+        const url = platform.resources.catalog;
+
         fetch(url, {
             headers: new Headers({
                 'Authorization': `Bearer ${accessToken}`,
@@ -28,13 +31,15 @@ class Catalog extends React.Component {
             throw "Error while fetching data.";
         })
         .then(body => {
+            const username = body.username;
             const products = body.products;
+            const key = `${username}@${platform.id}`;
             this.setState((prevState) => {
                 return {
                     ...prevState,
                     products: {
                         ...prevState.products,
-                        [accessToken]: products
+                        [key]: products
                     }
                 };
             });
@@ -49,16 +54,15 @@ class Catalog extends React.Component {
 
         this.state.tokens.map(token => {
             const platform = this.props.platforms.filter(p => p.id === token.platform)[0];
-            const url = platform.resources.catalog;
-            this.fetchCatalog(url, token.accessToken);
+            this.fetchCatalog(platform, token.accessToken);
         });
     };
 
     render() {
-        const accessTokens = Object.keys(this.state.products);
+        const keys = Object.keys(this.state.products);
 
-        const reducer = (acc, val) => acc.concat(this.state.products[val]);
-        const products = accessTokens.reduce(reducer, []);
+        const reducer = (acc, key) => R.concat(acc, R.map(R.assoc('account', key), this.state.products[key]));
+        const products = keys.reduce(reducer, []);
 
         return (
             <Section>
@@ -70,7 +74,8 @@ class Catalog extends React.Component {
                                 <tr key={index}>
                                     <td>{product.type}</td>
                                     <td>{product.nature}</td>
-                                    <td>{product.quantity}</td>
+                                    <td>{product.account}</td>
+                                    <td className="has-text-right">{product.quantity}</td>
                                 </tr>
                             ))}
                         </tbody>
