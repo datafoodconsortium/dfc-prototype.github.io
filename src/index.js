@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { Button, Container, Content, Hero, HeroBody, Image, Media, MediaContent, MediaLeft, Section, Subtitle, Title } from 'bloomer';
+import { Button, Column, Columns, Container, Content, Hero, HeroBody, Image, Media, MediaContent, MediaLeft, Section, Subtitle, Title } from 'bloomer';
 import { tokenRepository } from './tokenRepository.js';
 import Accounts from './components/Accounts.jsx';
 import Catalog from './components/Catalog.jsx';
@@ -27,9 +27,17 @@ render(
                 </Media>
             </HeroBody>
         </Hero>
-        <Catalog platforms={platforms} />
-        <Accounts platforms={platforms} />
-        <TokenStore platforms={platforms} />
+        <Columns>
+            <Column isSize={3}>
+                <Section>
+                    <TokenStore platforms={platforms} />
+                </Section>
+            </Column>
+            <Column>
+                <Catalog platforms={platforms} />
+                <Accounts platforms={platforms} />
+            </Column>
+        </Columns>
     </Container>,
     document.getElementById('root')
 );
