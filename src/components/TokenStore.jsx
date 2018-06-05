@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button, Content, Section, Title } from 'bloomer';
+import { Button, Content, Panel, PanelBlock, PanelHeading, Section, Title } from 'bloomer';
 import { tokenRepository } from '../tokenRepository.js';
 
 class TokenStore extends React.Component {
@@ -34,30 +34,34 @@ class TokenStore extends React.Component {
 
     render() {
         const tokenListItems = this.state.tokens.map(
-            (token, index) => <li key={index}>{token.platform} {token.accessToken.substring(0, 16)}... (expires {token.expires})</li>
+            (token, index) => <PanelBlock key={index}>
+                {token.platform}
+            </PanelBlock>
         );
 
-        const connectButtons = this.props.platforms.map(
-            (platform) => <span key={platform.id}>
-                <Button key={platform.id} onClick={() => this.handleConnect(platform)}>Connect to {platform.name}</Button>
-                {' '}
-            </span>
+        const newConnectionItems = this.props.platforms.map(
+            (platform) => <PanelBlock key={platform.id}>
+                <Button isFullWidth isOutlined isColor="primary" onClick={() => this.handleConnect(platform)}>
+                    {platform.name}
+                </Button>
+            </PanelBlock>
         );
 
         return (
-            <Section>
-                <Title>Connections</Title>
-                <Title isSize={4}>Current connections</Title>
-                {tokenListItems.length === 0 && 'No connection'}
-                <Content>
-                    <ul>{tokenListItems}</ul>
-                    {tokenListItems.length > 0 && (
-                        <Button isColor="warning" onClick={this.clearConnections.bind(this)}>Clear connections</Button>
-                    )}
-                </Content>
-                <Title isSize={4}>Add connection</Title>
-                {connectButtons}
-            </Section>
+            <Panel>
+                <PanelHeading>Connections</PanelHeading>
+                {tokenListItems.length === 0 && <PanelBlock>No connection</PanelBlock>}
+                {tokenListItems}
+                {tokenListItems.length > 0 && (
+                    <PanelBlock>
+                        <Button isFullWidth isOutlined isColor="danger" onClick={this.clearConnections.bind(this)}>
+                        Clear connections
+                        </Button>
+                    </PanelBlock>
+                )}
+                <PanelHeading>Add connection</PanelHeading>
+                {newConnectionItems}
+            </Panel>
         );
     }
 }
