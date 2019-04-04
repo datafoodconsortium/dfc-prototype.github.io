@@ -41,3 +41,50 @@ npm start
 # browse!
 xdg-open http://localhost:1234
 ```
+
+### Run the prototype and fake OAuth servers with Docker Compose
+
+```sh
+# create a dedicated directory
+mkdir datafoodconsortium
+cd datafoodconsortium
+
+# clone the prototype repo and servers
+git clone git@github.com:datafoodconsortium/dfc-prototype.github.io.git
+git clone git@github.com:datafoodconsortium/fake-auth-server-php.git
+
+# create a docker-compose.yml file
+cat > docker-compose.yml <<EOF
+version: '2.1'
+
+services:
+    prototype:
+        build: ./dfc-prototype.github.io
+        ports:
+            - "1234:1234"
+
+    oauth_lrqdo:
+        build: ./fake-auth-server-php
+        ports:
+            - "8001:8000"
+        environment:
+            PLATFORM_NAME: "La Ruche qui dit Oui !"
+            PLATFORM_BGCOLOR: "#FBCF06"
+            PLATFORM_LOGO: "https://laruchequiditoui.fr/favicon.ico"
+
+    oauth_openfood:
+        build: ./fake-auth-server-php
+        ports:
+            - "8002:8000"
+        environment:
+            PLATFORM_NAME: "Open Food Network"
+            PLATFORM_BGCOLOR: "#F2795C"
+            PLATFORM_LOGO: "https://www.openfoodfrance.org/favicon.ico"
+EOF
+
+# start
+docker-compose up
+
+# browse!
+xdg-open http://localhost:1234
+```
